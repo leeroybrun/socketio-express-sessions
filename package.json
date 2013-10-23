@@ -1,0 +1,20 @@
+{
+	"name": "sample-app",
+	"version": "0.0.1",
+	"author": "Leeroy Brun <leeroy.brun@gmail.com>",
+	"description": "Demo app using Express sessions with Socket.IO",
+	"private": true,
+	"scripts": {
+		"start": "node ./server.js"
+	},
+	"main": "./server.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/leeroybrun/http-server.git"
+	},
+	"dependencies" : {
+		"socket.io" :  "*",
+		"express" 	:  "*"
+	}, 
+	"license": "MIT"
+}

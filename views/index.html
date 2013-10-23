@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Sample App</title>
+		<style type="text/css">
+			body {
+				font-family:'Helvetica Neue', Helvetica, sans-serif;
+				font-size:14px;
+				color:#333333;
+			}
+
+			#wrapper {
+				width:700px;
+				margin:50px auto;
+			}
+			
+			.buttons {
+				text-align:center;
+			}
+
+			.buttons a {
+				display:inline-block;
+				padding: 6px 12px;
+				color:#ffffff;
+				margin:0 5px 0 5px;
+				text-decoration:none;
+			}
+
+			.buttons a.login {
+				background-color:#5cb85c;
+			}
+
+			.buttons a.logout {
+				background-color:#d9534f;
+			}
+
+			#log {
+				font-size:12px;
+				margin-top:20px;
+				padding: 9px 14px;
+				background-color: #f7f7f9;
+				border: 1px solid #e1e1e8;
+			}
+
+			@media (max-width: 68s0px) {
+				#wrapper {
+					width:95%;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrapper">
+			<div class="buttons">
+				<a href="/login" onclick="doLogin(); return false;" class="login">Login</a> <a href="/logout" class="logout">Logout</a>
+			</div>
+			<div id="log"></div>
+		</div>
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script>
+			// The DIV where the logs will be printed
+			var $logDiv = $('#log');
+
+			// Start a new Socket.IO connection
+			var socket = io.connect('http://localhost');
+
+			// Register a custom event, will receive infos from server
+			socket.on('myCustomEvent', function (data) {
+				$logDiv.prepend('<p>Socket.IO data received : '+ data +'</p>');
+			});
+
+			// Register an event on error with the Socket.IO connection
+			socket.on('error', function (error) {
+				$logDiv.prepend('<p>Socket.IO error : '+ error +'</p>');
+			});
+
+			// Register an event when the connection is successfully etablished
+			socket.on('connect', function () {
+				$logDiv.prepend('<p>Connected to the Socket.IO server.</p>');
+			});
+
+			// Do the login
+			function doLogin() {
+				$.get('/login', function(data) {
+					$logDiv.prepend('<p>Login done, please wait for reconnection...</p>');
+					// When login is done, we need to reconnect to the socket
+					// If we don't reconnect, the browser will not restart the handshake with the Socket.IO server
+					socket.socket.reconnect();
+				});
+			}
+		</script>
+	</body>
+</html>
