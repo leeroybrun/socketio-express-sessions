@@ -1,5 +1,7 @@
 # Socket.IO + Express 3 sessions
 
+[![Screen](https://raw.github.com/leeroybrun/socketio-express-sessions/master/screen.jpg)](https://raw.github.com/leeroybrun/socketio-express-sessions/master/screen.jpg)
+
 The goal of this project is to demonstrate how to use Express 3 sessions in Socket.IO for authentification.
 
 To achieve this we will store the Express sessions in a MemoryStore. We can then simply get the session ID from the client's cookies and extract the session from the MemoryStore.
