@@ -70,9 +70,9 @@ io.set('authorization', function (data, callback) {
 
         // Then we just need to load the session from the Express Session Store
         sessionStore.load(sidCookie, function(err, session) {
-        	// And last, we check if the used has a valid session and if he is logged in
+            // And last, we check if the used has a valid session and if he is logged in
             if (err || !session || session.isLogged !== true) {
-                callback('Error', false);
+                callback('Not logged in.', false);
             } else {
             	// If you want, you can attach the session to the handshake data, so you can use it again later
                 data.session = session;
