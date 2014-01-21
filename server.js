@@ -1,9 +1,9 @@
-var io      =   require('socket.io'),
-	http    =   require('http'),
-	express =   require('express');
+var io      = require('socket.io'),
+    http    = require('http'),
+    express = require('express');
 
 var PORT = process.env.PORT || 8080,
-	HOST = process.env.HOST || 'localhost';
+    HOST = process.env.HOST || 'localhost';
 
 // We define the key of the cookie containing the Express SID
 var EXPRESS_SID_KEY = 'express.sid';
@@ -21,8 +21,8 @@ var app = express();
 // * Cookie Parser created above
 // * Configure Session Store
 app.configure(function () {
-	app.use(cookieParser);
-	app.use(express.session({
+    app.use(cookieParser);
+    app.use(express.session({
         store: sessionStore,
         cookie: { 
             httpOnly: true
@@ -33,18 +33,18 @@ app.configure(function () {
 
 // Configture routes
 app.get('/', function (req, res) {
-	res.sendfile(__dirname + '/views/index.html');
+    res.sendfile(__dirname + '/views/index.html');
 });
 
 // Very basic login/logout routes
 app.get('/login', function (req, res) {
-	// We just set a session value indicating that the user is logged in
-	req.session.isLogged = true;
-	res.redirect('/');
+    // We just set a session value indicating that the user is logged in
+    req.session.isLogged = true;
+    res.redirect('/');
 });
 app.get('/logout', function (req, res) {
-	req.session.isLogged = false;
-	res.redirect('/');
+    req.session.isLogged = false;
+    res.redirect('/');
 });
 
 // Create HTTP server, register socket.io as listener
@@ -74,7 +74,7 @@ io.set('authorization', function (data, callback) {
             if (err || !session || session.isLogged !== true) {
                 callback('Not logged in.', false);
             } else {
-            	// If you want, you can attach the session to the handshake data, so you can use it again later
+                // If you want, you can attach the session to the handshake data, so you can use it again later
                 data.session = session;
 
                 callback(null, true);
@@ -85,15 +85,15 @@ io.set('authorization', function (data, callback) {
 
 // upon connection, start a periodic task that emits (every 1s) the current timestamp
 io.on('connection', function (socket) {
-	var sender = setInterval(function () {
-		socket.emit('myCustomEvent', new Date().getTime());
-	}, 1000);
+    var sender = setInterval(function () {
+        socket.emit('myCustomEvent', new Date().getTime());
+    }, 1000);
 
-	socket.on('disconnect', function() {
-		clearInterval(sender);
-	});
+    socket.on('disconnect', function() {
+        clearInterval(sender);
+    });
 });
 
- server.listen(PORT, HOST, null, function() {
+server.listen(PORT, HOST, null, function() {
     console.log('Server listening on port %d in %s mode', this.address().port, app.settings.env);
 });
