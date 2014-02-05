@@ -53,9 +53,11 @@ io = io.listen(server);
 
 // We configure the socket.io authorization handler (handshake)
 io.set('authorization', function (data, callback) {
-    if(!data.headers.cookie) {
+    if(!data.headers.cookie && !data.headers.secureCookies && !data.headers.signedCookies) {
         return callback('No cookie transmitted.', false);
     }
+
+    data.headers.cookie = data.headers.cookie || data.headers.secureCookies || data.headers.signedCookies;
 
     // We use the Express cookieParser created before to parse the cookie
     // Express cookieParser(req, res, next) is used initialy to parse data in "req.headers.cookie".
