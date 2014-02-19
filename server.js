@@ -75,6 +75,7 @@ io.set('authorization', function (data, callback) {
                 callback('Not logged in.', false);
             } else {
                 // If you want, you can attach the session to the handshake data, so you can use it again later
+                // You can access it later with "socket.handshake.session"
                 data.session = session;
 
                 callback(null, true);
