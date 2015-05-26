@@ -64,7 +64,7 @@
 			var $logDiv = $('#log');
 
 			// Start a new Socket.IO connection
-			var socket = io.connect('http://localhost');
+			var socket = io.connect('http://localhost', {forceNew: true});
 
 			// Register a custom event, will receive infos from server
 			socket.on('myCustomEvent', function (data) {
@@ -72,8 +72,8 @@
 			});
 
 			// Register an event on error with the Socket.IO connection
-			socket.on('error', function (error) {
-				$logDiv.prepend('<p>Socket.IO error : '+ error +'</p>');
+			socket.on('connect_error', function (error) {
+				$logDiv.prepend('<p>Socket.IO connect error : '+ error +'</p>');
 			});
 
 			// Register an event when the connection is successfully etablished
@@ -87,7 +87,7 @@
 					$logDiv.prepend('<p>Login done, please wait for reconnection...</p>');
 					// When login is done, we need to reconnect to the socket
 					// If we don't reconnect, the browser will not restart the handshake with the Socket.IO server
-					socket.socket.reconnect();
+					socket.reconnect();
 				});
 			}
 		</script>
