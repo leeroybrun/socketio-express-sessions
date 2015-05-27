@@ -1,11 +1,14 @@
-# Socket.IO + Express 3 sessions
+# Socket.IO 1 + Express 4 sessions
 
-The goal of this project is to demonstrate how to use Express 3 sessions in Socket.IO for authentification.
+[**Click here for the Express 3 & Socket.IO 0.9 example**](https://github.com/leeroybrun/socketio-express-sessions/tree/socketio0.9-express3)
 
-To achieve this we will store the Express sessions in a MemoryStore. We can then simply get the session ID from the client's cookies and extract the session from the MemoryStore.
+The goal of this project is to demonstrate how to use Express 4 sessions in Socket.IO 1 for authentification.
 
-There are already some examples out there on how to do that, you can found links at the end of this page.
-My goal here was just to give a complete example and not to need to `require('connect')` directly in our project, as Express has it own cookie parser.
+To achieve this we will store the Express sessions in a MemoryStore (not suitable for production, but you can use any other session store the same way).  
+We can then simply get the session ID from the client's cookies and extract the session from the MemoryStore.
+
+There are already some examples out there on how to do that, you can find links at the end of this page.
+My goal was just to give a complete example and not needing to `require('connect')` directly in our project, as Express has it own cookie parser.
 
 ## Screen
 
@@ -13,20 +16,27 @@ My goal here was just to give a complete example and not to need to `require('co
 
 ## Login process
 
-We have a small login process, here the user just need to access the `/login` page to be logged in. He can then be logged out by accessing the `/logout` page.
-In real world apps the login process will be a bit more complex, but hey, it's just a demo ;-).
+We have a small login process, here the user just need to access the `/login` page to be logged in.  
+He can then be logged out by accessing the `/logout` page.
+In real world apps the login process will be a bit more complex, but hey, it's just an example ;-).
 
-The login route will just set a `loggedIn` session flag to `true`.
+The login route will just set a `loggedIn` session flag to `true` and a `username`.
 
 ## Socket.IO handshake
 
-The Socket.IO authorization handler is used to accept or reject connections to the socket server.
+Socket.IO 1 is now using middlewares, so we can easily implement a simple middleware to handle auth.
 
-In fact, it's a simple HTTP call made from the client to the server. So we can get Express cookies from this call and parse them.
-In these cookies we can then find the Express SID, which will be used to extract the session data from the MemoryStore.
+In this middleware, we will :
 
-We then just have to check if the `loggedIn` flag is set to `true` and accept the connection.
-If it's not, or if the session doesn't exist, we refuse the connection to the socket server.
+1. Parse cookies from the request
+2. Get the session ID from the right cookie
+3. Then we will load the session associated with this given SID from the session store
+4. Now we can check if the user is logged in (here it's just a `session.isLogged === true` check)
+5. If the user is logged in, we just call the `next` callback of the middleware (with no arguments)
+6. If an error occurs during this process (no cookie, user not logged in, etc), we pass an error object to the first argument of the `next` callback
+
+When the user is detected as logged in, we can even attach some session data to the socket.request object.  
+This way, the session data attached will be available later (connection, events, etc).
 
 ## Initial credits / ideas
 - http://www.danielbaulig.de/socket-ioexpress/
