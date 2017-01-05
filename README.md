@@ -36,4 +36,3 @@ If it's not, or if the session doesn't exist, we refuse the connection to the so
 - http://notjustburritos.tumblr.com/post/22682186189/socket-io-and-express-3
 - http://howtonode.org/socket-io-auth
 
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/leeroybrun/socketio-express-sessions/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
